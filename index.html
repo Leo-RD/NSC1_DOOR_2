@@ -1,0 +1,470 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Accès Sécurisé - Connexion Alternative</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .login-container {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
+            padding: 40px;
+            width: 100%;
+            max-width: 400px;
+            text-align: center;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+        }
+
+        .logo-section {
+            margin-bottom: 30px;
+        }
+
+        .lock-icon {
+            width: 60px;
+            height: 60px;
+            background: linear-gradient(45deg, #4CAF50, #45a049);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 15px;
+            box-shadow: 0 4px 15px rgba(76, 175, 80, 0.3);
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+
+        .lock-icon::before {
+            content: "🔒";
+            font-size: 24px;
+            color: white;
+        }
+
+        h1 {
+            color: #333;
+            font-size: 24px;
+            font-weight: 300;
+            margin-bottom: 10px;
+        }
+
+        .subtitle {
+            color: #666;
+            font-size: 14px;
+            margin-bottom: 30px;
+            line-height: 1.5;
+        }
+
+        .nfc-status {
+            background: #fff3cd;
+            border: 1px solid #ffeaa7;
+            border-radius: 8px;
+            padding: 12px;
+            margin-bottom: 25px;
+            font-size: 13px;
+            color: #856404;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+            text-align: left;
+        }
+
+        label {
+            display: block;
+            color: #555;
+            font-size: 14px;
+            font-weight: 500;
+            margin-bottom: 8px;
+        }
+
+        input[type="text"], input[type="password"] {
+            width: 100%;
+            padding: 15px;
+            border: 2px solid #e1e8ed;
+            border-radius: 10px;
+            font-size: 16px;
+            transition: all 0.3s ease;
+            background: white;
+        }
+
+        input[type="text"]:focus, input[type="password"]:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+            transform: translateY(-2px);
+        }
+
+        .login-btn {
+            width: 100%;
+            background: linear-gradient(45deg, #667eea, #764ba2);
+            color: white;
+            border: none;
+            padding: 15px;
+            font-size: 16px;
+            font-weight: 600;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-top: 10px;
+        }
+
+        .login-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(102, 126, 234, 0.3);
+        }
+
+        .login-btn:active {
+            transform: translateY(0);
+        }
+
+        .divider {
+            margin: 25px 0;
+            position: relative;
+            text-align: center;
+        }
+
+        .divider::before {
+            content: "";
+            position: absolute;
+            top: 50%;
+            left: 0;
+            right: 0;
+            height: 1px;
+            background: #e1e8ed;
+        }
+
+        .divider span {
+            background: rgba(255, 255, 255, 0.95);
+            padding: 0 15px;
+            color: #666;
+            font-size: 12px;
+        }
+
+        .emergency-access {
+            background: #fff;
+            border: 2px dashed #ff6b6b;
+            border-radius: 10px;
+            padding: 15px;
+            margin-top: 20px;
+        }
+
+        .emergency-btn {
+            background: #ff6b6b;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 6px;
+            font-size: 14px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .emergency-btn:hover {
+            background: #ff5252;
+            transform: translateY(-1px);
+        }
+
+        .footer {
+            margin-top: 25px;
+            padding-top: 20px;
+            border-top: 1px solid #e1e8ed;
+            font-size: 12px;
+            color: #999;
+        }
+
+        .status-indicator {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            width: 12px;
+            height: 12px;
+            background: #4CAF50;
+            border-radius: 50%;
+            box-shadow: 0 0 10px rgba(76, 175, 80, 0.5);
+            animation: blink 2s infinite;
+        }
+
+        @keyframes blink {
+            0%, 50% { opacity: 1; }
+            51%, 100% { opacity: 0.3; }
+        }
+
+        @media (max-width: 480px) {
+            .login-container {
+                margin: 10px;
+                padding: 30px 25px;
+            }
+            
+            h1 {
+                font-size: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="status-indicator" title="Système en ligne"></div>
+    
+    <div class="login-container">
+        <div class="logo-section">
+            <div class="lock-icon"></div>
+            <h1>Accès Sécurisé</h1>
+            <p class="subtitle">Connexion alternative en l'absence de badge NFC</p>
+        </div>
+
+        <div class="nfc-status">
+            ⚠️ Badge NFC non détecté. Veuillez utiliser vos identifiants pour accéder.
+        </div>
+
+        <form id="loginForm">
+            <div class="form-group">
+                <label for="username">Identifiant</label>
+                <input type="text" id="username" name="username" required placeholder="Entrez votre identifiant">
+            </div>
+
+            <div class="form-group">
+                <label for="password">Mot de passe</label>
+                <input type="password" id="password" name="password" required placeholder="Entrez votre mot de passe">
+            </div>
+
+            <button type="submit" class="login-btn">
+                🔓 Déverrouiller la porte
+            </button>
+        </form>
+
+        <div class="divider">
+            <span>OU</span>
+        </div>
+
+        <div class="emergency-access">
+            <p style="font-size: 13px; color: #666; margin-bottom: 10px;">
+                <strong>Accès d'urgence</strong><br>
+                En cas d'urgence uniquement
+            </p>
+            <button class="emergency-btn" onclick="requestEmergencyAccess()">
+                🚨 Demande d'accès d'urgence
+            </button>
+        </div>
+
+        <div class="footer">
+            <p>Système de contrôle d'accès sécurisé</p>
+            <p>© 2025 - Tous droits réservés</p>
+        </div>
+    </div>
+
+    <script>
+        // Variables pour simuler l'état du système
+        let loginAttempts = 0;
+        const maxAttempts = 3;
+
+        // Gestion du formulaire de connexion
+        document.getElementById('loginForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const username = document.getElementById('username').value;
+            const password = document.getElementById('password').value;
+            
+            if (!username || !password) {
+                showMessage('Veuillez remplir tous les champs', 'error');
+                return;
+            }
+            
+            // Simulation de la vérification
+            authenticateUser(username, password);
+        });
+
+        function authenticateUser(username, password) {
+            const loginBtn = document.querySelector('.login-btn');
+            loginBtn.innerHTML = '🔄 Vérification...';
+            loginBtn.disabled = true;
+            
+            // Simulation d'un délai de vérification
+            setTimeout(() => {
+                loginAttempts++;
+                
+                // Simulation de connexion (remplacer par la vraie logique)
+                if (username === 'admin' && password === 'secure123') {
+                    showMessage('✅ Accès autorisé! Ouverture de la porte...', 'success');
+                    setTimeout(() => {
+                        unlockDoor();
+                    }, 2000);
+                } else {
+                    showMessage(`❌ Identifiants incorrects (${loginAttempts}/${maxAttempts})`, 'error');
+                    
+                    if (loginAttempts >= maxAttempts) {
+                        lockSystem();
+                    }
+                }
+                
+                loginBtn.innerHTML = '🔓 Déverrouiller la porte';
+                loginBtn.disabled = false;
+            }, 1500);
+        }
+
+        function unlockDoor() {
+            const container = document.querySelector('.login-container');
+            container.innerHTML = `
+                <div class="logo-section">
+                    <div class="lock-icon" style="background: linear-gradient(45deg, #4CAF50, #45a049); animation: none;">
+                        <span style="font-size: 24px;">✅</span>
+                    </div>
+                    <h1 style="color: #4CAF50;">Accès Autorisé</h1>
+                    <p class="subtitle">La porte a été déverrouillée avec succès</p>
+                </div>
+                <div style="background: #d4edda; border: 1px solid #c3e6cb; border-radius: 8px; padding: 20px; margin: 20px 0; color: #155724;">
+                    <h3>🚪 Porte ouverte</h3>
+                    <p>Vous avez 30 secondes pour passer</p>
+                    <div style="margin-top: 15px; font-size: 18px; font-weight: bold;" id="countdown">30</div>
+                </div>
+                <button onclick="location.reload()" style="background: #6c757d; color: white; border: none; padding: 10px 20px; border-radius: 6px; cursor: pointer;">
+                    Nouvelle connexion
+                </button>
+            `;
+            
+            // Décompte
+            let timeLeft = 30;
+            const countdownInterval = setInterval(() => {
+                timeLeft--;
+                const countdownEl = document.getElementById('countdown');
+                if (countdownEl) {
+                    countdownEl.textContent = timeLeft;
+                }
+                
+                if (timeLeft <= 0) {
+                    clearInterval(countdownInterval);
+                    location.reload();
+                }
+            }, 1000);
+        }
+
+        function lockSystem() {
+            showMessage('🔒 Système verrouillé pour 5 minutes suite à de multiples tentatives', 'error');
+            document.getElementById('loginForm').style.opacity = '0.5';
+            document.getElementById('loginForm').style.pointerEvents = 'none';
+            
+            setTimeout(() => {
+                location.reload();
+            }, 300000); // 5 minutes
+        }
+
+        function requestEmergencyAccess() {
+            if (confirm('Demander un accès d\'urgence?\nCette action sera enregistrée et nécessite une justification.')) {
+                showMessage('🚨 Demande d\'urgence envoyée. Un agent sera notifié.', 'warning');
+                
+                // Ici on pourrait envoyer une notification aux responsables sécurité
+                setTimeout(() => {
+                    alert('Un agent de sécurité vous contactera sous peu.');
+                }, 2000);
+            }
+        }
+
+        function showMessage(message, type) {
+            // Supprimer les anciens messages
+            const existingMessage = document.querySelector('.message');
+            if (existingMessage) {
+                existingMessage.remove();
+            }
+            
+            const messageDiv = document.createElement('div');
+            messageDiv.className = `message ${type}`;
+            messageDiv.textContent = message;
+            
+            const colors = {
+                success: '#d4edda',
+                error: '#f8d7da',
+                warning: '#fff3cd'
+            };
+            
+            const textColors = {
+                success: '#155724',
+                error: '#721c24',
+                warning: '#856404'
+            };
+            
+            messageDiv.style.cssText = `
+                background: ${colors[type]};
+                color: ${textColors[type]};
+                padding: 12px;
+                border-radius: 8px;
+                margin: 15px 0;
+                font-size: 14px;
+                border: 1px solid;
+                animation: slideIn 0.3s ease-out;
+            `;
+            
+            const style = document.createElement('style');
+            style.textContent = `
+                @keyframes slideIn {
+                    from { opacity: 0; transform: translateY(-10px); }
+                    to { opacity: 1; transform: translateY(0); }
+                }
+            `;
+            document.head.appendChild(style);
+            
+            document.querySelector('.login-container').insertBefore(messageDiv, document.getElementById('loginForm'));
+            
+            // Supprimer le message après 5 secondes
+            setTimeout(() => {
+                if (messageDiv.parentNode) {
+                    messageDiv.remove();
+                }
+            }, 5000);
+        }
+
+        // Animation d'entrée
+        window.addEventListener('load', () => {
+            document.querySelector('.login-container').style.animation = 'fadeInUp 0.6s ease-out';
+            
+            const style = document.createElement('style');
+            style.textContent = `
+                @keyframes fadeInUp {
+                    from { opacity: 0; transform: translateY(30px); }
+                    to { opacity: 1; transform: translateY(0); }
+                }
+            `;
+            document.head.appendChild(style);
+        });
+
+        // Détection de badge NFC simulée
+        setInterval(() => {
+            // Ici vous pourriez intégrer une vraie détection NFC
+            // Pour la démo, on simule une détection aléatoire
+            if (Math.random() < 0.1) { // 10% de chance
+                const nfcStatus = document.querySelector('.nfc-status');
+                if (nfcStatus) {
+                    nfcStatus.innerHTML = '📱 Badge NFC détecté! Redirection...';
+                    nfcStatus.style.background = '#d4edda';
+                    nfcStatus.style.borderColor = '#c3e6cb';
+                    nfcStatus.style.color = '#155724';
+                    
+                    setTimeout(() => {
+                        // Simulation de redirection vers l'authentification NFC
+                        showMessage('Authentification NFC en cours...', 'success');
+                    }, 1000);
+                }
+            }
+        }, 5000);
+    </script>
+</body>
+</html>

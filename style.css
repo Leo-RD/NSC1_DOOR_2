@@ -69,7 +69,7 @@ body {
 }
 
 .app-icon::before {
-    background-image: url('../ASSETS/enter-1.png');
+    background-image: url('./ASSETS/enter-1.png'); /* Adjusted path */
     content: '';
     font-size: 28px;
 }

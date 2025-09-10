@@ -69,7 +69,8 @@ body {
 }
 
 .app-icon::before {
-    content: "🔐";
+    background-image: url('../ASSETS/enter-1.png');
+    content: '';
     font-size: 28px;
 }
 

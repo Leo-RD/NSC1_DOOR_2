@@ -3,59 +3,45 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Accès Sécurisé - Connexion Alternative</title>
+    <title>Connexion</title>
+    <link href="https://fonts.googleapis.com/css2?family=Instrument+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <div class="status-indicator" title="Système en ligne"></div>
-    
-    <div class="login-container">
-        <div class="logo-section">
-            <div class="lock-icon"></div>
-            <h1>Accès Sécurisé</h1>
-            <p class="subtitle">Connexion alternative en l'absence de badge NFC</p>
+    <div class="container">
+        <div class="login-card" id="loginCard">
+            <div class="app-icon" id="appIcon"></div>
+            <h1 class="title">Connectez-vous avec vos identifiants</h1>
+            <p class="subtitle">Déverrouiller la porte</p>
+            
+            <form id="loginForm">
+                <div class="input-group">
+                    <div class="input-wrapper">
+                        <div class="input-icon user-icon"></div>
+                        <input type="text" class="input-field" placeholder="Votre identifiant..." required>
+                    </div>
+                </div>
+                
+                <div class="input-group">
+                    <div class="input-wrapper">
+                        <div class="input-icon lock-icon"></div>
+                        <input type="password" class="input-field" placeholder="Votre mot de passe..." required>
+                    </div>
+                </div>
+                
+                <button type="submit" class="login-button" id="loginBtn">Ouvrir</button>
+            </form>
         </div>
 
-        <div class="nfc-status">
-            ⚠️ Badge NFC non détecté. Veuillez utiliser vos identifiants pour accéder.
-        </div>
-
-        <form id="loginForm">
-            <div class="form-group">
-                <label for="username">Identifiant</label>
-                <input type="text" id="username" name="username" required placeholder="Entrez votre identifiant">
-            </div>
-
-            <div class="form-group">
-                <label for="password">Mot de passe</label>
-                <input type="password" id="password" name="password" required placeholder="Entrez votre mot de passe">
-            </div>
-
-            <button type="submit" class="login-btn">
-                🔓 Déverrouiller la porte
-            </button>
-        </form>
-
-        <div class="divider">
-            <span>OU</span>
-        </div>
-
-        <div class="emergency-access">
-            <p style="font-size: 13px; color: #666; margin-bottom: 10px;">
-                <strong>Accès d'urgence</strong><br>
-                En cas d'urgence uniquement
-            </p>
-            <button class="emergency-btn" onclick="requestEmergencyAccess()">
-                🚨 Demande d'accès d'urgence
-            </button>
-        </div>
-
-        <div class="footer">
-            <p>Système de contrôle d'accès sécurisé</p>
-            <p>© 2025 - Tous droits réservés</p>
+        <div class="emergency-card" id="emergencyCard">
+            <h3 class="emergency-title">Accès d'urgence - Appel à un agent</h3>
+            <button class="emergency-button pulse" id="emergencyBtn">Demande d'accès</button>
         </div>
     </div>
 
+    <footer class="footer">
+        <p class="footer-text">Contactez-nous :</p>
+    </footer>
     <script src="app.js"></script>
 </body>
 </html>

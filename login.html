@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Connexion</title>
+    <link href="https://fonts.googleapis.com/css2?family=Instrument+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <div class="login-card" id="loginCard">
+            <div class="app-icon" id="appIcon"></div>
+            <h1 class="title">Connectez-vous avec vos identifiants</h1>
+            <p class="subtitle">Déverrouiller la porte</p>
+            
+            <form id="loginForm">
+                <div class="input-group">
+                    <div class="input-wrapper">
+                        <div class="input-icon user-icon"></div>
+                        <input type="text" class="input-field" placeholder="Votre identifiant..." required>
+                    </div>
+                </div>
+                
+                <div class="input-group">
+                    <div class="input-wrapper">
+                        <div class="input-icon lock-icon"></div>
+                        <input type="password" class="input-field" placeholder="Votre mot de passe..." required>
+                    </div>
+                </div>
+                
+                <button type="submit" class="login-button" id="loginBtn">Ouvrir</button>
+            </form>
+        </div>
+
+        <div class="emergency-card" id="emergencyCard">
+            <h3 class="emergency-title">Accès d'urgence - Appel à un agent</h3>
+            <button class="emergency-button pulse" id="emergencyBtn">Demande d'accès</button>
+        </div>
+    </div>
+
+    <footer class="footer">
+        <p class="footer-text">Contactez-nous :</p>
+    </footer>
+    <script src="app.js"></script>
+</body>
+</html>

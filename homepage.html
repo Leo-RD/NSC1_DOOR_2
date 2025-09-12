@@ -1,0 +1,483 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NSC1 Secure Door - Accueil</title>
+    <link href="https://fonts.googleapis.com/css2?family=Instrument+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Instrument Sans', sans-serif;
+            min-height: 100vh;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background-image: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 1000"><defs><radialGradient id="a" cx="50%" cy="0%" r="100%"><stop offset="0%" style="stop-color:%23ffffff;stop-opacity:0.1"/><stop offset="100%" style="stop-color:%23ffffff;stop-opacity:0"/></radialGradient></defs><rect width="100%" height="100%" fill="url(%23a)"/><circle cx="200" cy="300" r="2" fill="white" opacity="0.3"/><circle cx="800" cy="200" r="1.5" fill="white" opacity="0.4"/><circle cx="300" cy="700" r="1" fill="white" opacity="0.5"/><circle cx="700" cy="600" r="2.5" fill="white" opacity="0.2"/></svg>');
+            background-size: cover;
+            background-attachment: fixed;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+            animation: backgroundFloat 20s ease-in-out infinite;
+        }
+
+        @keyframes backgroundFloat {
+            0%, 100% { background-position: 0% 0%; }
+            50% { background-position: 100% 100%; }
+        }
+
+        .container {
+            max-width: 450px;
+            width: 100%;
+            margin-bottom: 40px;
+        }
+
+        .main-title {
+            text-align: center;
+            color: white;
+            font-size: 32px;
+            font-weight: 800;
+            letter-spacing: 2px;
+            text-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+            margin-bottom: 40px;
+            transform: translateY(20px);
+            opacity: 0;
+            animation: slideUp 1s ease-out forwards;
+            animation-delay: 0.1s;
+        }
+
+        @keyframes slideUp {
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+
+        .menu-card {
+            background: rgba(234, 234, 234, 0.3);
+            backdrop-filter: blur(20px);
+            border-radius: 25px;
+            padding: 40px 30px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            transform: translateY(20px);
+            opacity: 0;
+            animation: slideUp 0.8s ease-out forwards;
+            animation-delay: 0.3s;
+        }
+
+        .menu-button {
+            width: 100%;
+            padding: 20px 25px;
+            background: #000;
+            color: white;
+            border: none;
+            border-radius: 20px;
+            font-size: 16px;
+            font-weight: 600;
+            font-family: inherit;
+            cursor: pointer;
+            margin-bottom: 20px;
+            transition: all 0.3s ease;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
+            position: relative;
+            overflow: hidden;
+            text-decoration: none;
+            display: block;
+            line-height: 1.4;
+        }
+
+        .menu-button:last-child {
+            margin-bottom: 0;
+        }
+
+        .menu-button:hover {
+            background: #333;
+            transform: translateY(-3px);
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.3);
+        }
+
+        .menu-button:active {
+            transform: translateY(-1px);
+        }
+
+        .menu-button::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+            transition: left 0.5s;
+        }
+
+        .menu-button:hover::before {
+            left: 100%;
+        }
+
+        /* Styles spécifiques pour chaque bouton */
+        .menu-button.badge-forgotten {
+            animation-delay: 0.5s;
+        }
+
+        .menu-button.password-forgotten {
+            animation-delay: 0.6s;
+        }
+
+        .menu-button.register {
+            animation-delay: 0.7s;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border: 2px solid rgba(255, 255, 255, 0.3);
+        }
+
+        .menu-button.register:hover {
+            background: linear-gradient(135deg, #5a6fd8 0%, #6a4190 100%);
+            transform: translateY(-3px) scale(1.02);
+        }
+
+        .footer {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: rgba(0, 0, 0, 0.8);
+            backdrop-filter: blur(20px);
+            padding: 20px;
+            text-align: center;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            transform: translateY(100%);
+            animation: slideUpFooter 0.8s ease-out forwards;
+            animation-delay: 0.8s;
+        }
+
+        @keyframes slideUpFooter {
+            to {
+                transform: translateY(0);
+            }
+        }
+
+        .footer-text {
+            color: white;
+            font-size: 16px;
+            font-weight: 500;
+            margin: 0;
+        }
+
+        /* Effet de parallaxe */
+        .menu-card.parallax {
+            transition: transform 0.1s ease-out;
+        }
+
+        /* Animations d'entrée séquentielles */
+        .menu-button {
+            transform: translateX(-30px);
+            opacity: 0;
+            animation: slideInLeft 0.6s ease-out forwards;
+        }
+
+        @keyframes slideInLeft {
+            to {
+                transform: translateX(0);
+                opacity: 1;
+            }
+        }
+
+        /* Animation de clic */
+        .menu-button.clicked {
+            animation: clickPulse 0.3s ease;
+        }
+
+        @keyframes clickPulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(0.95); }
+            100% { transform: scale(1); }
+        }
+
+        /* Responsive */
+        @media (max-width: 480px) {
+            .main-title {
+                font-size: 28px;
+                margin-bottom: 30px;
+            }
+
+            .menu-card {
+                padding: 30px 25px;
+                margin: 0 10px;
+            }
+
+            .menu-button {
+                padding: 18px 20px;
+                font-size: 15px;
+            }
+
+            .container {
+                margin-bottom: 80px;
+            }
+        }
+
+        /* Effet de surbrillance au survol */
+        .menu-button::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: radial-gradient(circle at center, rgba(255,255,255,0.1) 0%, transparent 70%);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            pointer-events: none;
+        }
+
+        .menu-button:hover::after {
+            opacity: 1;
+        }
+
+        /* Animation de pulsation pour le bouton d'inscription */
+        .menu-button.register {
+            animation: slideInLeft 0.6s ease-out forwards, pulse 3s ease-in-out infinite;
+            animation-delay: 0.7s, 2s;
+        }
+
+        @keyframes pulse {
+            0%, 100% {
+                box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
+            }
+            50% {
+                box-shadow: 0 8px 25px rgba(102, 126, 234, 0.4), 0 0 20px rgba(102, 126, 234, 0.2);
+            }
+        }
+
+        /* Amélioration visuelle */
+        .menu-button-icon {
+            display: inline-block;
+            margin-right: 10px;
+            font-size: 18px;
+            vertical-align: middle;
+        }
+
+        /* Animation des icônes */
+        .menu-button:hover .menu-button-icon {
+            transform: scale(1.2);
+            transition: transform 0.3s ease;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1 class="main-title">NSC1 SECURE DOOR</h1>
+        
+        <div class="menu-card" id="menuCard">
+            <a href="index.html" class="menu-button badge-forgotten" id="badgeBtn">
+                <span class="menu-button-icon">🔑</span>
+                J'ai oublié mon badge
+            </a>
+            
+            <button class="menu-button password-forgotten" id="passwordBtn">
+                <span class="menu-button-icon">🔒</span>
+                J'ai oublié mon mot de passe
+            </button>
+            
+            <a href="cardform.html" class="menu-button register" id="registerBtn">
+                <span class="menu-button-icon">📝</span>
+                Je veux m'inscrire
+            </a>
+        </div>
+    </div>
+
+    <footer class="footer">
+        <p class="footer-text">Contactez-nous :</p>
+    </footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const menuCard = document.getElementById('menuCard');
+            const menuButtons = document.querySelectorAll('.menu-button');
+            const badgeBtn = document.getElementById('badgeBtn');
+            const passwordBtn = document.getElementById('passwordBtn');
+            const registerBtn = document.getElementById('registerBtn');
+
+            // Effet de parallaxe léger
+            document.addEventListener('mousemove', function(e) {
+                const mouseX = e.clientX / window.innerWidth;
+                const mouseY = e.clientY / window.innerHeight;
+                
+                const moveX = (mouseX - 0.5) * 15;
+                const moveY = (mouseY - 0.5) * 15;
+                
+                menuCard.style.transform = `translateX(${moveX}px) translateY(${moveY}px)`;
+            });
+
+            // Animation de clic pour tous les boutons
+            menuButtons.forEach(button => {
+                button.addEventListener('click', function(e) {
+                    this.classList.add('clicked');
+                    
+                    // Retirer la classe après l'animation
+                    setTimeout(() => {
+                        this.classList.remove('clicked');
+                    }, 300);
+                });
+            });
+
+            // Gestion du bouton "mot de passe oublié"
+            passwordBtn.addEventListener('click', function(e) {
+                e.preventDefault();
+                
+                // Animation de chargement
+                const originalText = this.innerHTML;
+                this.innerHTML = '<span class="menu-button-icon">⏳</span>Redirection...';
+                this.style.background = '#ff9800';
+                
+                setTimeout(() => {
+                    // Simulation de redirection vers une page de récupération
+                    alert('Fonctionnalité en cours de développement.\nVeuillez contacter l\'administrateur pour réinitialiser votre mot de passe.');
+                    
+                    // Restaurer le bouton
+                    this.innerHTML = originalText;
+                    this.style.background = '#000';
+                }, 1500);
+            });
+
+            // Animation d'entrée personnalisée au chargement
+            setTimeout(() => {
+                menuButtons.forEach((button, index) => {
+                    button.style.animationDelay = `${0.5 + index * 0.1}s`;
+                });
+            }, 100);
+
+            // Effet sonore visuel au survol (vibration légère)
+            menuButtons.forEach(button => {
+                button.addEventListener('mouseenter', function() {
+                    if (navigator.vibrate) {
+                        navigator.vibrate(50); // Vibration légère sur mobile
+                    }
+                });
+            });
+
+            // Animation de chargement pour les liens
+            badgeBtn.addEventListener('click', function(e) {
+                e.preventDefault();
+                
+                const originalText = this.innerHTML;
+                this.innerHTML = '<span class="menu-button-icon">⏳</span>Chargement...';
+                this.style.background = '#4CAF50';
+                
+                setTimeout(() => {
+                    window.location.href = 'index.html';
+                }, 800);
+            });
+
+            registerBtn.addEventListener('click', function(e) {
+                e.preventDefault();
+                
+                const originalText = this.innerHTML;
+                this.innerHTML = '<span class="menu-button-icon">⏳</span>Ouverture...';
+                this.style.background = 'linear-gradient(135deg, #4CAF50 0%, #45a049 100%)';
+                
+                setTimeout(() => {
+                    window.location.href = 'cardform.html';
+                }, 800);
+            });
+
+            // Effet de particules au clic (optionnel)
+            menuButtons.forEach(button => {
+                button.addEventListener('click', function(e) {
+                    createClickEffect(e);
+                });
+            });
+
+            function createClickEffect(e) {
+                const button = e.currentTarget;
+                const rect = button.getBoundingClientRect();
+                const x = e.clientX - rect.left;
+                const y = e.clientY - rect.top;
+
+                const ripple = document.createElement('div');
+                ripple.style.cssText = `
+                    position: absolute;
+                    left: ${x}px;
+                    top: ${y}px;
+                    width: 0;
+                    height: 0;
+                    border-radius: 50%;
+                    background: rgba(255, 255, 255, 0.3);
+                    transform: translate(-50%, -50%);
+                    animation: rippleEffect 0.6s ease-out;
+                    pointer-events: none;
+                    z-index: 1;
+                `;
+
+                // Ajouter l'animation CSS si elle n'existe pas
+                if (!document.querySelector('#rippleKeyframes')) {
+                    const style = document.createElement('style');
+                    style.id = 'rippleKeyframes';
+                    style.textContent = `
+                        @keyframes rippleEffect {
+                            to {
+                                width: 100px;
+                                height: 100px;
+                                opacity: 0;
+                            }
+                        }
+                    `;
+                    document.head.appendChild(style);
+                }
+
+                button.appendChild(ripple);
+
+                setTimeout(() => {
+                    ripple.remove();
+                }, 600);
+            }
+
+            // Easter egg : animation spéciale si on clique plusieurs fois rapidement
+            let clickCount = 0;
+            let clickTimer;
+
+            document.addEventListener('click', function() {
+                clickCount++;
+                
+                clearTimeout(clickTimer);
+                clickTimer = setTimeout(() => {
+                    if (clickCount >= 5) {
+                        // Animation spéciale
+                        document.body.style.animation = 'backgroundFloat 2s ease-in-out';
+                        menuCard.style.animation = 'bounce 1s ease';
+                        
+                        setTimeout(() => {
+                            document.body.style.animation = 'backgroundFloat 20s ease-in-out infinite';
+                            menuCard.style.animation = '';
+                        }, 2000);
+                    }
+                    clickCount = 0;
+                }, 2000);
+            });
+        });
+
+        // Animation CSS supplémentaire pour le bounce
+        const bounceStyle = document.createElement('style');
+        bounceStyle.textContent = `
+            @keyframes bounce {
+                0%, 20%, 60%, 100% {
+                    transform: translateY(0);
+                }
+                40% {
+                    transform: translateY(-20px);
+                }
+                80% {
+                    transform: translateY(-10px);
+                }
+            }
+        `;
+        document.head.appendChild(bounceStyle);
+    </script>
+</body>
+</html>

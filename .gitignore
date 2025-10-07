@@ -1,0 +1,38 @@
+# Environment variables
+.env
+.env.local
+.env.production
+
+# Credentials (ne jamais commiter)
+*credentials*
+*secrets*
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Logs
+*.log
+logs/
+
+# Temporary files
+*.tmp
+*.temp
+temp/
+
+# Node modules (si vous utilisez npm/yarn plus tard)
+node_modules/
+package-lock.json
+yarn.lock
+
+# Build files (si vous ajoutez un build process)
+dist/
+build/

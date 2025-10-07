@@ -17,10 +17,8 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // Bouton retour
     backBtn.addEventListener('click', function() {
-        // Simulation du retour à la page précédente
         if (confirm('Êtes-vous sûr de vouloir revenir à la page de connexion ?')) {
-            window.location.href = 'Homepage.html'; // Décommentez pour la vraie navigation
-            console.log('Retour à la page de connexion');
+            window.location.href = 'Homepage.html';
         }
     });
 
@@ -47,43 +45,94 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 
     // Soumission du formulaire
-    contactForm.addEventListener('submit', function(e) {
+    contactForm.addEventListener('submit', async function(e) {
         e.preventDefault();
         
+        // Récupération des données du formulaire
+        const formInputs = contactForm.querySelectorAll('.input-field, .textarea-field');
+        const userData = {
+            fullName: formInputs[0].value.trim(),
+            email: formInputs[1].value.trim(),
+            phone: formInputs[2].value.trim(),
+            company: formInputs[3].value.trim(),
+            reason: formInputs[4].value.trim()
+        };
+
         // Animation du bouton
         submitBtn.innerHTML = 'Envoi en cours...';
         submitBtn.style.background = '#ff9800';
         submitBtn.disabled = true;
 
-        // Simulation d'envoi
-        setTimeout(() => {
-            submitBtn.innerHTML = '✓ Demande envoyée !';
-            submitBtn.style.background = '#4CAF50';
-            submitBtn.classList.add('bounce');
+        try {
+            // Appel API pour l'inscription
+            const result = await apiClient.register(userData);
 
-            // Afficher le message de succès
+            if (result.success) {
+                submitBtn.innerHTML = '✓ Demande envoyée !';
+                submitBtn.style.background = '#4CAF50';
+                submitBtn.classList.add('bounce');
+
+                // Afficher le message de succès
+                successMessage.textContent = result.message || '✓ Votre demande a été envoyée avec succès ! Nous vous contacterons sous 48h.';
+                successMessage.style.display = 'block';
+                successMessage.scrollIntoView({ behavior: 'smooth' });
+
+                // Réinitialiser le formulaire
+                setTimeout(() => {
+                    contactForm.reset();
+                    inputFields.forEach(field => {
+                        field.style.background = 'transparent';
+                    });
+                    
+                    submitBtn.classList.remove('bounce');
+                    submitBtn.innerHTML = 'Envoyer une autre demande';
+                    submitBtn.style.background = '#666';
+                    submitBtn.disabled = false;
+
+                    setTimeout(() => {
+                        successMessage.style.display = 'none';
+                        submitBtn.innerHTML = 'Envoyer la demande';
+                        submitBtn.style.background = '#000';
+                    }, 5000);
+                }, 3000);
+            } else {
+                // Erreur de l'API
+                submitBtn.innerHTML = '✗ Erreur';
+                submitBtn.style.background = '#D90404';
+                
+                // Afficher le message d'erreur
+                successMessage.textContent = '✗ ' + (result.message || 'Erreur lors de l\'envoi de la demande');
+                successMessage.style.background = '#D90404';
+                successMessage.style.display = 'block';
+                successMessage.scrollIntoView({ behavior: 'smooth' });
+
+                setTimeout(() => {
+                    submitBtn.innerHTML = 'Envoyer la demande';
+                    submitBtn.style.background = '#000';
+                    submitBtn.disabled = false;
+                    successMessage.style.display = 'none';
+                    successMessage.style.background = '#4CAF50';
+                }, 3000);
+            }
+        } catch (error) {
+            console.error('Erreur lors de l\'envoi:', error);
+            
+            submitBtn.innerHTML = '✗ Erreur serveur';
+            submitBtn.style.background = '#D90404';
+            
+            successMessage.textContent = '✗ Erreur de connexion au serveur. Veuillez réessayer.';
+            successMessage.style.background = '#D90404';
             successMessage.style.display = 'block';
             successMessage.scrollIntoView({ behavior: 'smooth' });
 
-            // Réinitialiser le formulaire
             setTimeout(() => {
-                contactForm.reset();
-                inputFields.forEach(field => {
-                    field.style.background = 'transparent';
-                });
-                
-                submitBtn.classList.remove('bounce');
-                submitBtn.innerHTML = 'Envoyer une autre demande';
-                submitBtn.style.background = '#666';
+                submitBtn.innerHTML = 'Envoyer la demande';
+                submitBtn.style.background = '#000';
                 submitBtn.disabled = false;
-
-                setTimeout(() => {
-                    successMessage.style.display = 'none';
-                    submitBtn.innerHTML = 'Envoyer la demande';
-                    submitBtn.style.background = '#000';
-                }, 5000);
+                successMessage.style.display = 'none';
+                successMessage.style.background = '#4CAF50';
             }, 3000);
-        }, 2000);
+        }
     });
 
     // Effet de parallaxe léger

@@ -1,0 +1,358 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test API NSC1</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 15px;
+            padding: 30px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+        }
+
+        h1 {
+            color: #333;
+            margin-bottom: 10px;
+        }
+
+        .subtitle {
+            color: #666;
+            margin-bottom: 30px;
+        }
+
+        .test-section {
+            margin-bottom: 30px;
+            padding: 20px;
+            background: #f5f5f5;
+            border-radius: 10px;
+            border-left: 4px solid #667eea;
+        }
+
+        .test-section h2 {
+            color: #667eea;
+            margin-bottom: 15px;
+            font-size: 18px;
+        }
+
+        button {
+            background: #667eea;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            margin-right: 10px;
+            margin-bottom: 10px;
+        }
+
+        button:hover {
+            background: #5568d3;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+        }
+
+        button:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .result {
+            margin-top: 15px;
+            padding: 15px;
+            background: white;
+            border-radius: 8px;
+            border: 1px solid #ddd;
+            max-height: 300px;
+            overflow-y: auto;
+        }
+
+        .result pre {
+            white-space: pre-wrap;
+            word-wrap: break-word;
+            font-size: 12px;
+            color: #333;
+        }
+
+        .success {
+            border-left: 4px solid #4CAF50;
+            background: #f1f8f4;
+        }
+
+        .error {
+            border-left: 4px solid #f44336;
+            background: #fef1f0;
+        }
+
+        .info {
+            background: #e3f2fd;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            border-left: 4px solid #2196F3;
+        }
+
+        .info strong {
+            color: #1976D2;
+        }
+
+        .status {
+            display: inline-block;
+            padding: 4px 12px;
+            border-radius: 12px;
+            font-size: 12px;
+            font-weight: 600;
+            margin-left: 10px;
+        }
+
+        .status.connected {
+            background: #4CAF50;
+            color: white;
+        }
+
+        .status.disconnected {
+            background: #f44336;
+            color: white;
+        }
+
+        input {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 10px;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            font-size: 14px;
+        }
+
+        .input-group {
+            margin-bottom: 15px;
+        }
+
+        .input-group label {
+            display: block;
+            margin-bottom: 5px;
+            color: #555;
+            font-weight: 500;
+            font-size: 14px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🧪 Test API NSC1</h1>
+        <p class="subtitle">Interface de test pour l'API REST</p>
+
+        <div class="info">
+            <strong>État de connexion:</strong>
+            <span class="status disconnected" id="authStatus">Non connecté</span>
+            <br><br>
+            <strong>URL API:</strong> <code id="apiUrl">Chargement...</code>
+        </div>
+
+        <!-- Test 1: Connexion -->
+        <div class="test-section">
+            <h2>1️⃣ Test de connexion (Login)</h2>
+            <div class="input-group">
+                <label>Nom d'utilisateur:</label>
+                <input type="text" id="loginUsername" placeholder="Entrez le nom d'utilisateur">
+            </div>
+            <div class="input-group">
+                <label>Mot de passe:</label>
+                <input type="password" id="loginPassword" placeholder="Entrez le mot de passe">
+            </div>
+            <button onclick="testLogin()">🔐 Tester la connexion</button>
+            <button onclick="testLogout()">🚪 Déconnexion</button>
+            <div id="loginResult" class="result" style="display: none;"></div>
+        </div>
+
+        <!-- Test 2: Inscription -->
+        <div class="test-section">
+            <h2>2️⃣ Test d'inscription (Register)</h2>
+            <div class="input-group">
+                <label>Nom complet:</label>
+                <input type="text" id="regFullName" placeholder="John Doe" value="Test User">
+            </div>
+            <div class="input-group">
+                <label>Email:</label>
+                <input type="email" id="regEmail" placeholder="test@example.com" value="test@example.com">
+            </div>
+            <div class="input-group">
+                <label>Téléphone:</label>
+                <input type="tel" id="regPhone" placeholder="0612345678" value="0612345678">
+            </div>
+            <div class="input-group">
+                <label>Entreprise:</label>
+                <input type="text" id="regCompany" placeholder="ACME Corp" value="Test Company">
+            </div>
+            <div class="input-group">
+                <label>Motif:</label>
+                <input type="text" id="regReason" placeholder="Raison de la demande" value="Test d'inscription">
+            </div>
+            <button onclick="testRegister()">📝 Tester l'inscription</button>
+            <div id="registerResult" class="result" style="display: none;"></div>
+        </div>
+
+        <!-- Test 3: Demande d'urgence -->
+        <div class="test-section">
+            <h2>3️⃣ Test de demande d'urgence</h2>
+            <button onclick="testEmergency()">🚨 Tester demande d'urgence</button>
+            <div id="emergencyResult" class="result" style="display: none;"></div>
+        </div>
+
+        <!-- Test 4: Info utilisateur -->
+        <div class="test-section">
+            <h2>4️⃣ Test récupération infos utilisateur</h2>
+            <button onclick="testUserInfo()">👤 Récupérer les infos</button>
+            <div id="userInfoResult" class="result" style="display: none;"></div>
+        </div>
+
+        <!-- Test 5: Vérification token -->
+        <div class="test-section">
+            <h2>5️⃣ Vérification des tokens</h2>
+            <button onclick="checkTokens()">🔍 Vérifier les tokens</button>
+            <button onclick="clearTokens()">🗑️ Effacer les tokens</button>
+            <div id="tokenResult" class="result" style="display: none;"></div>
+        </div>
+    </div>
+
+    <script src="api-config.js"></script>
+    <script>
+        // Mise à jour de l'état de connexion
+        function updateAuthStatus() {
+            const statusEl = document.getElementById('authStatus');
+            if (apiClient.isAuthenticated()) {
+                statusEl.textContent = 'Connecté ✓';
+                statusEl.className = 'status connected';
+            } else {
+                statusEl.textContent = 'Non connecté';
+                statusEl.className = 'status disconnected';
+            }
+        }
+
+        // Afficher l'URL de l'API
+        document.getElementById('apiUrl').textContent = API_CONFIG.BASE_URL;
+        updateAuthStatus();
+
+        // Fonction pour afficher les résultats
+        function showResult(elementId, data, isSuccess = true) {
+            const resultEl = document.getElementById(elementId);
+            resultEl.style.display = 'block';
+            resultEl.className = 'result ' + (isSuccess ? 'success' : 'error');
+            resultEl.innerHTML = '<pre>' + JSON.stringify(data, null, 2) + '</pre>';
+            updateAuthStatus();
+        }
+
+        // Test 1: Connexion
+        async function testLogin() {
+            const username = document.getElementById('loginUsername').value;
+            const password = document.getElementById('loginPassword').value;
+
+            if (!username || !password) {
+                showResult('loginResult', { error: 'Veuillez remplir tous les champs' }, false);
+                return;
+            }
+
+            try {
+                showResult('loginResult', { status: 'Connexion en cours...' }, true);
+                const result = await apiClient.login(username, password);
+                showResult('loginResult', result, result.success);
+            } catch (error) {
+                showResult('loginResult', { error: error.message }, false);
+            }
+        }
+
+        // Test déconnexion
+        function testLogout() {
+            apiClient.logout();
+            showResult('loginResult', { message: 'Déconnexion réussie', tokens_cleared: true }, true);
+        }
+
+        // Test 2: Inscription
+        async function testRegister() {
+            const userData = {
+                fullName: document.getElementById('regFullName').value,
+                email: document.getElementById('regEmail').value,
+                phone: document.getElementById('regPhone').value,
+                company: document.getElementById('regCompany').value,
+                reason: document.getElementById('regReason').value
+            };
+
+            try {
+                showResult('registerResult', { status: 'Envoi en cours...' }, true);
+                const result = await apiClient.register(userData);
+                showResult('registerResult', result, result.success);
+            } catch (error) {
+                showResult('registerResult', { error: error.message }, false);
+            }
+        }
+
+        // Test 3: Demande d'urgence
+        async function testEmergency() {
+            try {
+                showResult('emergencyResult', { status: 'Envoi de la demande d\'urgence...' }, true);
+                const result = await apiClient.emergencyAccess('Test de demande d\'urgence depuis l\'interface de test');
+                showResult('emergencyResult', result, result.success);
+            } catch (error) {
+                showResult('emergencyResult', { error: error.message }, false);
+            }
+        }
+
+        // Test 4: Info utilisateur
+        async function testUserInfo() {
+            try {
+                showResult('userInfoResult', { status: 'Récupération des informations...' }, true);
+                const result = await apiClient.getUserInfo();
+                showResult('userInfoResult', result, result.success);
+            } catch (error) {
+                showResult('userInfoResult', { error: error.message }, false);
+            }
+        }
+
+        // Test 5: Vérification tokens
+        function checkTokens() {
+            const tokens = {
+                jwt_token: localStorage.getItem('jwt_token'),
+                refresh_token: localStorage.getItem('refresh_token'),
+                user_info: localStorage.getItem('user_info'),
+                isAuthenticated: apiClient.isAuthenticated()
+            };
+            showResult('tokenResult', tokens, true);
+        }
+
+        function clearTokens() {
+            localStorage.clear();
+            apiClient.clearTokens();
+            showResult('tokenResult', { message: 'Tous les tokens ont été effacés' }, true);
+            updateAuthStatus();
+        }
+
+        // Vérifier l'état au chargement
+        window.addEventListener('load', () => {
+            updateAuthStatus();
+            console.log('🧪 Interface de test API chargée');
+            console.log('📡 URL API:', API_CONFIG.BASE_URL);
+            console.log('🔐 Authentifié:', apiClient.isAuthenticated());
+        });
+    </script>
+</body>
+</html>

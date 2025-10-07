@@ -34,28 +34,25 @@ document.addEventListener('DOMContentLoaded', function() {
 
         loginBtn.innerHTML = 'Connexion...';
         loginBtn.style.background = '#4CAF50';
+        loginBtn.disabled = true;
 
         try {
-            const response = await fetch("https://ton-api.com/login", {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ username, password })
-            });
+            // Utilisation du client API pour la connexion
+            const result = await apiClient.login(username, password);
 
-            const data = await response.json();
-
-            if (response.ok) {
-                localStorage.setItem("token", data.token);
-
+            if (result.success) {
                 loginBtn.innerHTML = '✓ Connecté !';
                 loginBtn.classList.add('bounce');
 
+                // Redirection après succès
                 setTimeout(() => {
-                    window.location.href = "game.html";
+                    window.location.href = "homepage.html";
                 }, 1500);
             } else {
-                loginBtn.innerHTML = data.message || "Identifiants incorrects";
+                loginBtn.innerHTML = result.message || "Identifiants incorrects";
                 loginBtn.style.background = '#D90404';
+                loginBtn.disabled = false;
+                
                 setTimeout(() => {
                     loginBtn.innerHTML = 'Ouvrir';
                     loginBtn.style.background = '#000';
@@ -65,6 +62,8 @@ document.addEventListener('DOMContentLoaded', function() {
             console.error("Erreur:", err);
             loginBtn.innerHTML = "Erreur serveur";
             loginBtn.style.background = '#D90404';
+            loginBtn.disabled = false;
+            
             setTimeout(() => {
                 loginBtn.innerHTML = 'Ouvrir';
                 loginBtn.style.background = '#000';
@@ -73,23 +72,51 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 
     // Bouton urgence
-    emergencyBtn.addEventListener('click', function() {
+    emergencyBtn.addEventListener('click', async function() {
         this.innerHTML = 'Demande envoyée...';
         this.style.background = '#ff9800';
         this.classList.remove('pulse');
+        this.disabled = true;
         
-        setTimeout(() => {
-            this.innerHTML = '✓ Agent contacté !';
-            this.style.background = '#4CAF50';
-            this.classList.add('bounce');
+        try {
+            // Appel API pour demande d'urgence
+            const result = await apiClient.emergencyAccess('Demande d\'accès d\'urgence depuis la page de connexion');
+            
+            if (result.success) {
+                this.innerHTML = '✓ Agent contacté !';
+                this.style.background = '#4CAF50';
+                this.classList.add('bounce');
+                
+                setTimeout(() => {
+                    this.classList.remove('bounce');
+                    this.innerHTML = 'Demande d\'accès';
+                    this.style.background = '#D90404';
+                    this.classList.add('pulse');
+                    this.disabled = false;
+                }, 3000);
+            } else {
+                this.innerHTML = '✗ Erreur';
+                this.style.background = '#D90404';
+                
+                setTimeout(() => {
+                    this.innerHTML = 'Demande d\'accès';
+                    this.style.background = '#D90404';
+                    this.classList.add('pulse');
+                    this.disabled = false;
+                }, 2000);
+            }
+        } catch (error) {
+            console.error('Erreur demande d\'urgence:', error);
+            this.innerHTML = '✗ Erreur serveur';
+            this.style.background = '#D90404';
             
             setTimeout(() => {
-                this.classList.remove('bounce');
                 this.innerHTML = 'Demande d\'accès';
                 this.style.background = '#D90404';
                 this.classList.add('pulse');
-            }, 3000);
-        }, 2000);
+                this.disabled = false;
+            }, 2000);
+        }
     });
 
     // Effet parallaxe

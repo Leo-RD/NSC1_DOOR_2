@@ -4,7 +4,7 @@
  */
 
 const API_CONFIG = {
-    BASE_URL: 'http://kasalali.alwaysdata.net/API_NSC1',
+    BASE_URL: 'https://kasalali.alwaysdata.net/API_NSC1',
     JWT_USERNAME: 'NSC1_API',
     JWT_PASSWORD: 'Jone_Porte!87-/',
     ENDPOINTS: {
